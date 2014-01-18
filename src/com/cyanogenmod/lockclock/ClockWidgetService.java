@@ -34,6 +34,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.cyanogenmod.lockclock.calendar.CalendarViewsService;
 import com.cyanogenmod.lockclock.misc.Constants;

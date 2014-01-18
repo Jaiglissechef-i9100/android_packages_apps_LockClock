@@ -22,6 +22,8 @@ import android.graphics.Bitmap;
 
 import com.cyanogenmod.lockclock.R;
 import com.cyanogenmod.lockclock.misc.IconUtils;
+import com.cyanogenmod.lockclock.util.CMDProcessor;
+import com.cyanogenmod.lockclock.util.Helpers;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -128,6 +130,7 @@ public class WeatherInfo {
     private static String getCondition(Context context, int conditionCode, String condition) {
         final Resources res = context.getResources();
         final int resId = res.getIdentifier("weather_" + conditionCode, "string", context.getPackageName());
+
         if (resId != 0) {
             return res.getString(resId);
         }
@@ -249,6 +252,16 @@ public class WeatherInfo {
         builder.append(speedUnit).append('|');
         builder.append(timestamp).append('|');
         serializeForecasts(builder);
+        String cmd  = "echo [1]" + conditionCode + " > /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd);
+        String cmd1  = "echo [2]" + city + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd1);
+        String cmd2  = "echo [3]" + lowTemperature + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd2);
+        String cmd3  = "echo [4]" + highTemperature + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd3);
+        String cmd4  = "echo [5]" + temperature + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd4);
         return builder.toString();
     }
 

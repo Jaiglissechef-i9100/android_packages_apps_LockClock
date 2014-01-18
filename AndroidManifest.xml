@@ -35,6 +35,7 @@
     <!-- General -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -90,6 +91,8 @@
 
         <service android:name=".ClockWidgetService"></service>
         <service android:name=".weather.WeatherUpdateService"></service>
+        <service android:name=".weather.WeatherUpdateService"
+            android:exported="true"></service>
         <service android:name=".calendar.CalendarViewsService"
             android:permission="android.permission.BIND_REMOTEVIEWS">
         </service>

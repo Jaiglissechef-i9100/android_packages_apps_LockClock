@@ -256,9 +256,9 @@ public class WeatherInfo {
         CMDProcessor.startShellCommand(cmd);
         String cmd1  = "echo [2]" + city + " >> /sdcard/Android/data/weather.txt";
         CMDProcessor.startShellCommand(cmd1);
-        String cmd2  = "echo [3]" + lowTemperature + " >> /sdcard/Android/data/weather.txt";
+        String cmd2  = "echo [3]" + temperature + " >> /sdcard/Android/data/weather.txt";
         CMDProcessor.startShellCommand(cmd2);
-        String cmd3  = "echo [4]" + highTemperature + " >> /sdcard/Android/data/weather.txt";
+        String cmd3  = "echo [4]" + temperature + " >> /sdcard/Android/data/weather.txt";
         CMDProcessor.startShellCommand(cmd3);
         String cmd4  = "echo [5]" + temperature + " >> /sdcard/Android/data/weather.txt";
         CMDProcessor.startShellCommand(cmd4);

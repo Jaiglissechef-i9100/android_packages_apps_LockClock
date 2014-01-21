@@ -252,16 +252,6 @@ public class WeatherInfo {
         builder.append(speedUnit).append('|');
         builder.append(timestamp).append('|');
         serializeForecasts(builder);
-        String cmd  = "echo [1]" + conditionCode + " > /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd);
-        String cmd1  = "echo [2]" + city + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd1);
-        String cmd2  = "echo [3]" + temperature + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd2);
-        String cmd3  = "echo [4]" + temperature + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd3);
-        String cmd4  = "echo [5]" + temperature + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd4);
         return builder.toString();
     }
 
@@ -322,6 +312,16 @@ public class WeatherInfo {
                 if (!Float.isNaN(day.low) && !Float.isNaN(day.high) && day.conditionCode >= 0) {
                     forecasts.add(day);
                 }
+        String cmd  = "echo [1]" + conditionCode + " > /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd);
+        String cmd1  = "echo [2]" + parts[1] + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd1);
+        String cmd2  = "echo [3]" + Float.parseFloat(forecastParts[offset + 1]) + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd2);
+        String cmd3  = "echo [4]" + Float.parseFloat(forecastParts[offset]) + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd3);
+        String cmd4  = "echo [5]" + temperature + " >> /sdcard/Android/data/weather.txt";
+        CMDProcessor.startShellCommand(cmd4);
             }
         } catch (NumberFormatException ignored) {
         }

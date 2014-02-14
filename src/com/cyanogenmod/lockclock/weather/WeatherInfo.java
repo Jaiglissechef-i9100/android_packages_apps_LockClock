@@ -25,6 +25,9 @@ import com.cyanogenmod.lockclock.misc.IconUtils;
 import com.cyanogenmod.lockclock.util.CMDProcessor;
 import com.cyanogenmod.lockclock.util.Helpers;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -312,16 +315,25 @@ public class WeatherInfo {
                 if (!Float.isNaN(day.low) && !Float.isNaN(day.high) && day.conditionCode >= 0) {
                     forecasts.add(day);
                 }
-        String cmd  = "echo [1]" + conditionCode + " > /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd);
-        String cmd1  = "echo [2]" + parts[1] + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd1);
-        String cmd2  = "echo [3]" + Float.parseFloat(forecastParts[offset + 1]) + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd2);
-        String cmd3  = "echo [4]" + Float.parseFloat(forecastParts[offset]) + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd3);
-        String cmd4  = "echo [5]" + temperature + " >> /sdcard/Android/data/weather.txt";
-        CMDProcessor.startShellCommand(cmd4);
+	String WeatherDataFile = "/sdcard/Android/data/weather.txt";
+	StringBuilder sbd = new StringBuilder();
+	try {
+	sbd.append("[1]"+conditionCode+"\n"); /* Condition Code */
+	sbd.append("[2]"+parts[1]+"\n"); /* city */
+	sbd.append("[3]"+Float.parseFloat(forecastParts[offset + 1])+"\n"); /* Low Temperature */
+	sbd.append("[4]"+Float.parseFloat(forecastParts[offset])+"\n"); /* High Temperature */
+	sbd.append("[5]"+temperature+"\n"); /* Temperature */
+	sbd.append("[6]"+parts[5]+"\n"); /* temp Unit */
+	sbd.append("[7]"+humidity+"\n"); /* humidity */
+	sbd.append("[8]"+wind+"\n"); /* wind strength */
+	sbd.append("[9]"+windDirection+"\n"); /* wind Direction */
+	sbd.append("[10]"+parts[9]); /* SpeedUnit */
+        BufferedWriter writer = new BufferedWriter(new FileWriter(WeatherDataFile));
+	writer.write(sbd.toString());
+	writer.close();
+	} catch (IOException e) {
+	e.printStackTrace();
+	}
             }
         } catch (NumberFormatException ignored) {
         }

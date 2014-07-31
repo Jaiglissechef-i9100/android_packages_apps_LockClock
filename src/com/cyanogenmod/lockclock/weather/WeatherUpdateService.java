@@ -26,6 +26,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -39,6 +40,8 @@ import com.cyanogenmod.lockclock.ClockWidgetProvider;
 import com.cyanogenmod.lockclock.misc.Constants;
 import com.cyanogenmod.lockclock.misc.Preferences;
 import com.cyanogenmod.lockclock.misc.WidgetUtils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.Date;
 
@@ -180,12 +183,23 @@ public class WeatherUpdateService extends Service {
                 String locationProvider = lm.getBestProvider(sLocationCriteria, true);
                 if (TextUtils.isEmpty(locationProvider)) {
                     Log.e(TAG, "No available location providers matching criteria.");
+                } else if (isGooglePlayServicesAvailable()
+                        && locationProvider.equals(LocationManager.GPS_PROVIDER)) {
+                    // Since Google Play services is available,
+                    // let's conserve battery power and not depend on the device's GPS.
+                    Log.i(TAG, "Google Play Services available; Ignoring GPS provider.");
                 } else {
                     WeatherLocationListener.registerIfNeeded(mContext, locationProvider);
                 }
             }
 
             return location;
+        }
+
+        private boolean isGooglePlayServicesAvailable() {
+            int result = GooglePlayServicesUtil.isGooglePlayServicesAvailable(mContext);
+            return result == ConnectionResult.SUCCESS
+                    || result == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED;
         }
 
         @Override
@@ -249,6 +263,7 @@ public class WeatherUpdateService extends Service {
                 long interval = 30 * 60 * 1000;
                 scheduleUpdate(mContext, interval, false);
             }
+            WeatherContentProvider.updateCachedWeatherInfo(mContext, result);
 
             Intent finishedIntent = new Intent(ACTION_UPDATE_FINISHED);
             finishedIntent.putExtra(EXTRA_UPDATE_CANCELLED, result == null);
